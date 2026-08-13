@@ -78,7 +78,7 @@ class _RegistrationState extends State<Registration> {
                   {
                     await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
                     if(!context.mounted) return;
-                    Navigator.pushNamed(context, '/mainscreen');
+                    Navigator.pushNamed(context, MainScreen.routeName);
                   } on FirebaseAuthException catch (e) {
                 setState(() {
                   switch (e.code) {
