@@ -1,0 +1,7 @@
+à faire :
+
+faire un bouton logout jsp où mais
+
+afficher/masquer le mot de passe
+
+remettre la page acceuil à jour

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "516928360526",
+    "project_id": "minimed-5ff4d",
+    "storage_bucket": "minimed-5ff4d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516928360526:android:d2263a245b14c77f80331f",
+        "android_client_info": {
+          "package_name": "be.hepl.minimed.minimed"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5NuwRE0Ro0oXu7c2D2MMQax61H5v4SV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

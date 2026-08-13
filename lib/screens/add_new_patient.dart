@@ -12,49 +12,50 @@ class AddNewPatient extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MainBackground(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Ajouter un nouveau patient",
-                style: titleText,
-              ),
-
-              const SizedBox(height: 30),
-
-              MyFormField(
-                  label: "Nom et prénom",
-                  icon: Icons.person_outlined ,
-                  isToHide: false
-              ),
-
-              MyFormField(
-                  label: "Numéro de téléphone",
-                  icon: Icons.phone_iphone_outlined,
-                  isToHide: false
-              ),
-
-              MyFormField(
-                label: "Date de naissance",
-                icon: Icons.calendar_month_outlined,
-                isToHide: false
-              ),
-              MyFormField(
-              label: "Email de contact",
-              icon: Icons.email,
-              isToHide : false
-              ),
-
-              SizedBox(height: 30,),
-
-              ActionButton(
-                  label:"Enregistrer",
-                  onTap: () {
-                              print("ajout d'un nouveau patient");
-                            }
-              ),
-            ],
-          ),
+          // child: Column(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     const Text(
+          //       "Ajouter un nouveau patient",
+          //       style: titleText,
+          //     ),
+          //
+          //     const SizedBox(height: 30),
+          //
+          //     MyFormField(
+          //         label: "Nom et prénom",
+          //         icon: Icons.person_outlined ,
+          //         isToHide: false,
+          //         onChanged: ,
+          //     ),
+          //
+          //     MyFormField(
+          //         label: "Numéro de téléphone",
+          //         icon: Icons.phone_iphone_outlined,
+          //         isToHide: false
+          //     ),
+          //
+          //     MyFormField(
+          //       label: "Date de naissance",
+          //       icon: Icons.calendar_month_outlined,
+          //       isToHide: false
+          //     ),
+          //     MyFormField(
+          //     label: "Email de contact",
+          //     icon: Icons.email,
+          //     isToHide : false
+          //     ),
+          //
+          //     SizedBox(height: 30,),
+          //
+          //     ActionButton(
+          //         label:"Enregistrer",
+          //         onTap: () {
+          //                     print("ajout d'un nouveau patient");
+          //                   }
+          //     ),
+          //   ],
+          // ),
         )
     );
   }
