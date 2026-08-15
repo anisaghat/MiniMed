@@ -1,18 +1,35 @@
 name: dto
-description: Modèles de données (DTO) pour MiniMed
+description: Modèles de données pour MiniMed
 version: 1.0.0
 publish_to: 'none'
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.9.0 <4.0.0'
+  flutter: ">=1.17.0"
 
 dependencies:
-  freezed_annotation: ^2.4.4
-  cloud_firestore_odm: 1.0.0-dev.88
-  cloud_firestore: ^5.0.0
+  flutter:
+    sdk: flutter
+
+  firebase_core: ^4.13.0
+  cloud_firestore: ^6.8.0
+
+  collection: ^1.18.0
+
+  firestore_odm: ^4.0.0
+  firestore_odm_annotation: ^4.0.0
+  freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
 
 dev_dependencies:
-  build_runner: ^2.4.13
-  freezed: ^2.5.7
-  json_serializable: ^6.8.0
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+  firestore_odm_builder: ^4.0.0
+  build_runner: ^2.5.4
+  freezed: ^3.0.0
+  json_serializable: ^6.9.5
+
+flutter:
