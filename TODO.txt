@@ -1,18 +1,6 @@
-à faire :
+faire un bouton logout jsp où
 
-faire un bouton logout jsp où mais
-
-afficher/masquer le mot de passe dans login et signup
-
-
-
-
-faire un truc navigation en bas de page mais jsp quoi m
-
-
-ettre deans honnetement donc jsp
-
-
+faire un truc navigation en bas de page mais jsp quoi mettre dedans honnetement donc jsp
 
 faire le readme et onboarding
 
