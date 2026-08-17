@@ -4,11 +4,4 @@ faire un bouton logout jsp où mais
 
 afficher/masquer le mot de passe dans login et signup
 
-remettre la page acceuil à jour
-
-
-pour la date de naissance mettre un datepicker
-
-pour le gender mettre un dropdown avec  M OU F
-
 prochaine étape : aller recheercher les patients au lieu de l'affichage en dur dans mainscreen

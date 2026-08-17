@@ -1,9 +1,14 @@
+import 'package:dto/models/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:minimed/constants/fonts.dart';
 import 'package:minimed/constants/style.dart';
 import 'package:minimed/screens/add_new_patient.dart';
 import 'package:minimed/widget/main_background.dart';
 import 'package:minimed/constants/sizes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dto/schema.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firestore_odm/firestore_odm.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -11,33 +16,8 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<List<String>> patients = [
-      ["Dupont", "Jean"],
-      ["Martin", "Marie"],
-      ["Durand", "Pierre"],
-      ["Robert", "Lucie"],
-      ["Lambert", "Paul"],
-      ["Dupont", "Jean"],
-      ["Martin", "Marie"],
-      ["Durand", "Pierre"],
-      ["Robert", "Lucie"],
-      ["Lambert", "Paul"],
-      ["Dupont", "Jean"],
-      ["Martin", "Marie"],
-      ["Durand", "Pierre"],
-      ["Robert", "Lucie"],
-      ["Lambert", "Paul"],
-      ["Dupont", "Jean"],
-      ["Martin", "Marie"],
-      ["Durand", "Pierre"],
-      ["Robert", "Lucie"],
-      ["Lambert", "Paul"],
-      ["Dupont", "Jean"],
-      ["Martin", "Marie"],
-      ["Durand", "Pierre"],
-      ["Robert", "Lucie"],
-      ["Lambert", "Paul"],
-    ];
+    final db = FirestoreODM(appSchema,firestore: FirebaseFirestore.instance,);
+    final userId = FirebaseAuth.instance.currentUser!.uid;
 
     return MainBackground(
       child: Center(
@@ -66,36 +46,48 @@ class MainScreen extends StatelessWidget {
             Expanded(
               child: Padding (
                 padding : const EdgeInsets.symmetric(horizontal : 20),
-                child : ListView.separated(
-                  itemCount: patients.length,
-                  separatorBuilder: (context, index) => const Divider(
-                    thickness: 1,
-                    color: Colors.black26,
-                  ),
-                  itemBuilder: (context, index) {
-                    final patient = patients[index];
-                    final prenom = patient[0];
-                    final nom = patient[1];
+                child : StreamBuilder<List<Patient>>(
+                    stream: db.users(userId).patients.stream,
+                    builder: (context,snapshot) {
+                      if(snapshot.hasError) {
+                        return Center(child: Text("ERROR"),);
+                      }
+                      if(!snapshot.hasData) {
+                        return Center(child: Text("NO DATA"),);
+                      }
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 50,
-                            child: Text(
-                              "${index + 1}",
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                      final patients = snapshot.data!;
+
+                      return ListView.separated(
+                          itemCount : patients.length,
+                          separatorBuilder : (context, index) => const Divider(
+                            thickness: 1,
+                            color: Colors.black26,
                           ),
-                          Text(
-                            "$nom $prenom",
-                            style: const TextStyle(fontSize: fontSizeM),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                          itemBuilder: (context,index) {
+                           final patient = patients[index];
+
+                           return Padding(
+                             padding: const EdgeInsets.symmetric(vertical: 15),
+                             child: Row(
+                               children: [
+                                 SizedBox(
+                                    width : kindaBigSizedBox,
+                                    child: Text(
+                                      "${index + 1}",
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                 ),
+                                 Text(
+                                   "${patient.lastName} ${patient.firstName}",
+                                   style: const TextStyle(fontSize: fontSizeM),
+                                 ),
+                               ],
+                             ),
+                           );
+                      }
+                      );
+                    }
                 ),
               ),
             ),
