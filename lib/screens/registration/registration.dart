@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:minimed/constants/fonts.dart';
 import 'package:minimed/constants/style.dart';
 import 'package:minimed/screens/main_screen/main_screen.dart';
 import 'package:minimed/widget/action_button.dart';

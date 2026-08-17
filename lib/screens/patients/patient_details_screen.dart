@@ -8,8 +8,8 @@ import 'package:minimed/constants/colors.dart';
 import 'package:minimed/constants/fonts.dart';
 import 'package:minimed/constants/sizes.dart';
 import 'package:minimed/constants/style.dart';
-import 'package:minimed/screens/add_new_patient.dart';
-import 'package:minimed/screens/patient-treatment.dart';
+import 'package:minimed/screens/patients/add_new_patient.dart';
+import 'package:minimed/screens/patients/patient_treatment.dart';
 import 'package:minimed/widget/action_button.dart';
 import 'package:minimed/widget/main_background.dart';
 

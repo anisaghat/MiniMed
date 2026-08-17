@@ -9,7 +9,7 @@ import 'package:minimed/constants/colors.dart';
 import 'package:minimed/constants/fonts.dart';
 import 'package:minimed/constants/sizes.dart';
 import 'package:minimed/constants/style.dart';
-import 'package:minimed/screens/add-new-medication.dart';
+import 'package:minimed/screens/medication/add_new_medication.dart';
 import 'package:minimed/widget/main_background.dart';
 import 'package:minimed/widget/navigation_button.dart';
 

@@ -5,8 +5,8 @@ import 'package:minimed/screens/welcome_screen/welcome_screen.dart';
 import 'package:minimed/screens/auth_screen/auth_screen.dart';
 import 'package:minimed/screens/login/login.dart';
 import 'package:minimed/screens/registration/registration.dart';
-import 'package:minimed/screens/add_new_patient.dart';
-import 'package:minimed/screens/add-new-medication.dart';
+import 'package:minimed/screens/patients/add_new_patient.dart';
+import 'package:minimed/screens/medication/add_new_medication.dart';
 
 Map<String, WidgetBuilder> router = {
   WelcomeScreen.routeName: (BuildContext context) => WelcomeScreen(),

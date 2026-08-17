@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:minimed/widget/navigation_button.dart';
 import 'package:minimed/screens/login/login.dart';
 import 'package:minimed/screens/registration/registration.dart';
-import 'package:minimed/router/router.dart';
 import 'package:minimed/constants/colors.dart';
 
 
