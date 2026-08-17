@@ -1,8 +1,10 @@
 import 'package:dto/models/patient.dart';
 import 'package:flutter/material.dart';
+import 'package:minimed/constants/colors.dart';
 import 'package:minimed/constants/fonts.dart';
 import 'package:minimed/constants/style.dart';
 import 'package:minimed/screens/add_new_patient.dart';
+import 'package:minimed/screens/patient-details-screen.dart';
 import 'package:minimed/widget/main_background.dart';
 import 'package:minimed/constants/sizes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,7 +18,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final db = FirestoreODM(appSchema,firestore: FirebaseFirestore.instance,);
+    final db = FirestoreODM(appSchema, firestore: FirebaseFirestore.instance);
     final userId = FirebaseAuth.instance.currentUser!.uid;
 
     return MainBackground(
@@ -28,66 +30,115 @@ class MainScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   "Mes patients",
-                  style: titleText,
+                  style: titleText.copyWith(fontWeight: FontWeight.w500),
                 ),
 
                 const SizedBox(width: regularSizedBox),
 
-                IconButton(onPressed: () {Navigator.pushNamed(
-                    context, AddNewPatient.routeName
-                );}, icon: const Icon(Icons.person_add_alt_outlined))
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AddNewPatient.routeName);
+                  },
+                  icon: Icon(
+                    Icons.person_add_alt_outlined,
+                    color: iconFormColor,
+                  ),
+                ),
               ],
             ),
 
             const SizedBox(height: regularSizedBox),
 
             Expanded(
-              child: Padding (
-                padding : const EdgeInsets.symmetric(horizontal : 20),
-                child : StreamBuilder<List<Patient>>(
-                    stream: db.users(userId).patients.stream,
-                    builder: (context,snapshot) {
-                      if(snapshot.hasError) {
-                        return Center(child: Text("ERROR"),);
-                      }
-                      if(!snapshot.hasData) {
-                        return Center(child: Text("NO DATA"),);
-                      }
-
-                      final patients = snapshot.data!;
-
-                      return ListView.separated(
-                          itemCount : patients.length,
-                          separatorBuilder : (context, index) => const Divider(
-                            thickness: 1,
-                            color: Colors.black26,
-                          ),
-                          itemBuilder: (context,index) {
-                           final patient = patients[index];
-
-                           return Padding(
-                             padding: const EdgeInsets.symmetric(vertical: 15),
-                             child: Row(
-                               children: [
-                                 SizedBox(
-                                    width : kindaBigSizedBox,
-                                    child: Text(
-                                      "${index + 1}",
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                 ),
-                                 Text(
-                                   "${patient.lastName} ${patient.firstName}",
-                                   style: const TextStyle(fontSize: fontSizeM),
-                                 ),
-                               ],
-                             ),
-                           );
-                      }
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: screenHorizontalPadding,
+                ),
+                child: StreamBuilder<List<Patient>>(
+                  stream: db.users(userId).patients.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text(
+                          "Impossible de charger les patients",
+                          style: TextStyle(fontSize: fontSizeM),
+                        ),
                       );
                     }
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(color: blue),
+                      );
+                    }
+
+                    final patients = snapshot.data!;
+
+                    if (patients.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "Aucun patient",
+                          style: TextStyle(
+                            fontSize: fontSizeM,
+                            color: textFormColor,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.separated(
+                      itemCount: patients.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        thickness: 1,
+                        color: Colors.black26,
+                        indent: kindaBigSizedBox,
+                        endIndent: smallSizedBox,
+                      ),
+                      itemBuilder: (context, index) {
+                        final patient = patients[index];
+
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    PatientDetailsScreen(patient: patient),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: smallSizedBox,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.person_outline,
+                                  color: iconFormColor,
+                                ),
+
+                                const SizedBox(width: smallSizedBox),
+
+                                Expanded(
+                                  child: Text(
+                                    "${patient.lastName} ${patient.firstName}",
+                                    style: const TextStyle(
+                                      fontSize: fontSizeM,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+
+                                Icon(Icons.chevron_right, color: iconFormColor),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ),

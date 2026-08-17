@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:minimed/constants/colors.dart';
 import 'package:minimed/constants/fonts.dart';
+import 'package:minimed/constants/sizes.dart';
 import 'package:minimed/constants/style.dart';
 import 'package:minimed/screens/main_screen/main_screen.dart';
 import 'package:minimed/widget/action_button.dart';
@@ -13,7 +14,9 @@ import 'package:minimed/widget/main_background.dart';
 import 'package:minimed/widget/my_form_field.dart';
 
 class AddNewPatient extends StatefulWidget {
-  const AddNewPatient({super.key});
+  final Patient? patientToEdit;
+
+  const AddNewPatient({super.key, this.patientToEdit});
   static const String routeName = '/addnewpatient';
 
   @override
@@ -29,132 +32,178 @@ class _AddNewPatientState extends State<AddNewPatient> {
   String gender = "";
 
   @override
+  void initState() {
+    super.initState();
+
+    final patient = widget.patientToEdit;
+
+    if (patient != null) {
+      firstName = patient.firstName;
+      lastName = patient.lastName;
+      phoneNumber = patient.phoneNumber;
+      dateOfBirth = patient.dateOfBirth;
+      email = patient.email;
+      gender = patient.gender;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return  MainBackground(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Ajouter un nouveau patient",
-                style: titleText,
-              ),
+    return MainBackground(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              widget.patientToEdit == null
+                  ? "Ajouter un nouveau patient"
+                  : "Modifier le patient",
+              style: titleText,
+            ),
 
-              const SizedBox(height: 30),
+            const SizedBox(height: regularSizedBox),
 
-              MyFormField(
-                  label: "Nom",
-                  icon: Icons.badge_outlined ,
+            MyFormField(
+              label: "Nom",
+              icon: Icons.badge_outlined,
+              isToHide: false,
+              initialValue: lastName,
+              onChanged: (value) {
+                lastName = value;
+              },
+            ),
+
+            MyFormField(
+              label: "Prénom",
+              icon: Icons.person_outlined,
+              isToHide: false,
+              initialValue: firstName,
+              onChanged: (value) {
+                firstName = value;
+              },
+            ),
+
+            MyFormField(
+              label: "Numéro de téléphone",
+              icon: Icons.phone_iphone_outlined,
+              isToHide: false,
+              initialValue: phoneNumber,
+              onChanged: (value) {
+                phoneNumber = value;
+              },
+            ),
+
+            GestureDetector(
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: dateOfBirth ?? DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+
+                if (pickedDate != null) {
+                  setState(() {
+                    dateOfBirth = pickedDate;
+                  });
+                }
+              },
+              child: AbsorbPointer(
+                child: MyFormField(
+                  label: dateOfBirth == null
+                      ? "Date de naissance"
+                      : "${dateOfBirth!.day}/${dateOfBirth!.month}/${dateOfBirth!.year}",
+                  icon: Icons.calendar_month_outlined,
                   isToHide: false,
-                  onChanged: (value) { lastName = value; },
-              ),
-
-              MyFormField(
-                label: "Prénom",
-                icon: Icons.person_outlined ,
-                isToHide: false,
-                onChanged: (value) { firstName = value; },
-              ),
-
-              MyFormField(
-                  label: "Numéro de téléphone",
-                  icon: Icons.phone_iphone_outlined,
-                  isToHide: false,
-                onChanged: (value) { phoneNumber = value; },
-              ),
-
-              GestureDetector(
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-
-                  if (pickedDate != null) {
-                    setState(() {
-                      dateOfBirth = pickedDate;
-                    });
-                  }
-                },
-                child: AbsorbPointer(
-                  child: MyFormField(
-                    label: dateOfBirth == null ? "Date de naissance" : "${dateOfBirth!.day}/${dateOfBirth!.month}/${dateOfBirth!.year}",
-                    icon: Icons.calendar_month_outlined,
-                    isToHide: false,
-                    onChanged: (value) {},
-
-                  ),
+                  onChanged: (value) {},
                 ),
               ),
+            ),
 
-              MyFormField(
+            MyFormField(
               label: "Email de contact",
               icon: Icons.email,
-              isToHide : false,
-                onChanged: (value) { email = value; },
+              isToHide: false,
+              initialValue: email,
+              onChanged: (value) {
+                email = value;
+              },
+            ),
+
+            DropdownButtonFormField<String>(
+              initialValue: gender.isEmpty ? null : gender,
+
+              items: const [
+                DropdownMenuItem(value: 'Femme', child: Text('Femme')),
+                DropdownMenuItem(value: 'Homme', child: Text('Homme')),
+              ],
+
+              onChanged: (value) {
+                setState(() {
+                  gender = value ?? '';
+                });
+              },
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.wc_outlined, color: iconFormColor),
+                hintText: "Sexe",
+                hintStyle: TextStyle(fontSize: fontSizeS, color: textFormColor),
               ),
+            ),
 
-              DropdownButtonFormField<String>(
-                initialValue: gender.isEmpty ? null : gender,
+            const SizedBox(height: regularSizedBox),
 
-                items: const
-                [
-                  DropdownMenuItem(child: Text('Femme'), value: 'Femme'),
-                  DropdownMenuItem(child: Text('Homme'), value: 'Homme'),
-                ],
+            ActionButton(
+              label: widget.patientToEdit == null
+                  ? "Enregistrer un nouveau patient"
+                  : "Enregistrer les modifications",
+              onTap: () async {
+                final db = FirestoreODM(
+                  appSchema,
+                  firestore: FirebaseFirestore.instance,
+                );
+                final patient = Patient(
+                  id: widget.patientToEdit?.id ?? FirestoreODM.autoGeneratedId,
+                  firstName: firstName,
+                  lastName: lastName,
+                  dateOfBirth: dateOfBirth!,
+                  gender: gender,
+                  email: email,
+                  phoneNumber: phoneNumber,
+                  createdAt: widget.patientToEdit?.createdAt ?? DateTime.now(),
+                );
 
-                onChanged: (value) {
-                  setState(() {
-                    gender = value ?? '';
-                  });
-                },
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.wc_outlined, color: iconFormColor),
-                  hintText: "Sexe",
-                  hintStyle:  TextStyle(
-                    fontSize: fontSizeS,
-                    color: textFormColor,
-                  )
-                )
-                ),
+                final patients = db
+                    .users(FirebaseAuth.instance.currentUser!.uid)
+                    .patients;
 
-              SizedBox(height: 30,),
+                if (widget.patientToEdit == null) {
+                  await patients.insert(patient);
+                } else {
+                  await patients.update(patient);
+                }
 
-              ActionButton(
-                  label:"Enregistrer un nouveau patient",
-                  onTap: () async {
-                    final db = FirestoreODM(appSchema, firestore: FirebaseFirestore.instance);
+                if (!context.mounted) return;
 
-                    await db.users(FirebaseAuth.instance.currentUser!.uid).patients.insert(
-                        Patient(
-                          id: FirestoreODM.autoGeneratedId,
-                          firstName: firstName,
-                          lastName: lastName,
-                          dateOfBirth: dateOfBirth!,
-                          gender: gender,
-                          email: email,
-                          phoneNumber: phoneNumber,
-                          createdAt: DateTime.now(),
-                        ),
-                    );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      widget.patientToEdit == null
+                          ? 'Patient ajouté'
+                          : 'Patient modifié',
+                    ),
+                  ),
+                );
 
-                    if(!context.mounted) return;
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('patient added'),
-                      ),
-                    );
-
-                    Navigator.pushNamed(context, MainScreen.routeName);
-
-                  }
-              ),
-            ],
-          ),
-        )
+                if (widget.patientToEdit == null) {
+                  Navigator.pushNamed(context, MainScreen.routeName);
+                } else {
+                  Navigator.pop(context, patient);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

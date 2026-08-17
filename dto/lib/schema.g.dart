@@ -15,6 +15,8 @@ final class _$UsersCollection {}
 
 final class _$PatientsCollection {}
 
+final class _$MedicationsCollection {}
+
 /// Generated schema class - dummy class that only serves as type marker
 class AppSchema extends FirestoreSchema {
   const AppSchema();
@@ -114,6 +116,42 @@ extension $AppSchemaUsersTransactionDocument
       );
 }
 
+/// Transaction document class for users/*/patients collection
+extension $AppSchemaUsersPatientsTransactionDocument
+    on
+        TransactionDocument<
+          AppSchema,
+          Patient,
+          (_$UsersCollection, _$PatientsCollection),
+          PatientPatchBuilder<Patient>
+        > {
+  /// Access medications subcollection
+  @pragma('vm:prefer-inline')
+  TransactionCollection<
+    AppSchema,
+    Medication,
+    (_$UsersCollection, _$PatientsCollection, _$MedicationsCollection),
+    MedicationPatchBuilder<Medication>
+  >
+  get medications =>
+      TransactionCollection<
+        AppSchema,
+        Medication,
+        (_$UsersCollection, _$PatientsCollection, _$MedicationsCollection),
+        MedicationPatchBuilder<Medication>
+      >(
+        query: ref.collection('medications'),
+        context: context,
+        toJson: (value) => (value.toJson() as Map<String, dynamic>),
+        fromJson: (value) =>
+            Medication.fromJson((value as Map<String, dynamic>)),
+        documentIdField: 'id',
+        patchBuilder: MedicationPatchBuilder<Medication>(
+          toJson: (value) => (value.toJson() as Map<String, dynamic>),
+        ),
+      );
+}
+
 /// Document class for users collection
 extension $AppSchemaUsersDocument
     on
@@ -145,6 +183,40 @@ extension $AppSchemaUsersDocument
     orderByBuilderFunc: (context) => PatientOrderByBuilder(context: context),
     aggregateBuilderFunc: (context) =>
         PatientAggregateBuilderRoot(context: context),
+  );
+}
+
+/// Document class for users/*/patients collection
+extension $AppSchemaUsersPatientsDocument
+    on
+        FirestoreDocument<
+          AppSchema,
+          Patient,
+          (_$UsersCollection, _$PatientsCollection),
+          PatientPatchBuilder<Patient>
+        > {
+  /// Access medications subcollection
+  FirestoreCollection<
+    AppSchema,
+    Medication,
+    (_$UsersCollection, _$PatientsCollection, _$MedicationsCollection),
+    MedicationPatchBuilder<Medication>,
+    MedicationFilterBuilderRoot,
+    MedicationOrderByBuilder,
+    MedicationAggregateBuilderRoot
+  >
+  get medications => FirestoreCollection(
+    query: ref.collection('medications'),
+    toJson: (value) => (value.toJson() as Map<String, dynamic>),
+    fromJson: (value) => Medication.fromJson((value as Map<String, dynamic>)),
+    documentIdField: 'id',
+    patchBuilder: MedicationPatchBuilder<Medication>(
+      toJson: (value) => (value.toJson() as Map<String, dynamic>),
+    ),
+    filterBuilder: MedicationFilterBuilderRoot(),
+    orderByBuilderFunc: (context) => MedicationOrderByBuilder(context: context),
+    aggregateBuilderFunc: (context) =>
+        MedicationAggregateBuilderRoot(context: context),
   );
 }
 
@@ -188,6 +260,35 @@ extension $AppSchemaUsersBatchDocument
     fromJson: (value) => Patient.fromJson((value as Map<String, dynamic>)),
     documentIdField: 'id',
     patchBuilder: PatientPatchBuilder<Patient>(
+      toJson: (value) => (value.toJson() as Map<String, dynamic>),
+    ),
+  );
+}
+
+/// Batch document class for users/*/patients collection
+extension $AppSchemaUsersPatientsBatchDocument
+    on
+        BatchDocument<
+          AppSchema,
+          Patient,
+          (_$UsersCollection, _$PatientsCollection),
+          PatientPatchBuilder<Patient>
+        > {
+  /// Access medications subcollection
+  @pragma('vm:prefer-inline')
+  BatchCollection<
+    AppSchema,
+    Medication,
+    (_$UsersCollection, _$PatientsCollection, _$MedicationsCollection),
+    MedicationPatchBuilder<Medication>
+  >
+  get medications => getBatchCollection(
+    parent: this,
+    name: 'medications',
+    toJson: (value) => (value.toJson() as Map<String, dynamic>),
+    fromJson: (value) => Medication.fromJson((value as Map<String, dynamic>)),
+    documentIdField: 'id',
+    patchBuilder: MedicationPatchBuilder<Medication>(
       toJson: (value) => (value.toJson() as Map<String, dynamic>),
     ),
   );
