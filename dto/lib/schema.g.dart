@@ -220,7 +220,7 @@ extension $AppSchemaUsersPatientsDocument
   );
 }
 
-/// Extension to add collections to BatchContext<AppSchema>
+/// Extension to add collections to BatchContext AppSchema
 extension $AppSchemaBatchContextExtensions on BatchContext<AppSchema> {
   /// Access users collection
   BatchCollection<AppSchema, User, (_$UsersCollection,), UserPatchBuilder<User>>
