@@ -7,6 +7,7 @@ Son objectif est de centraliser les informations essentielles de chaque patient 
 L’application permet notamment de consulter les médicaments prescrits, leur posologie et les différents moments de prise.
 
 MiniMed vise ainsi à simplifier le suivi quotidien des patients en regroupant toutes les informations importantes concernant leurs traitements dans une seule application claire, pratique et accessible.
+
 ## Fonctionnalités principale
 
 L'application permet de
@@ -19,6 +20,25 @@ L'application permet de
 * indiquer la posologie et le nombre de prises par jour
 * préciser les moments de prise d'un médicament si nécessaire
 * modifier ou supprimer les informations enreigstrées
+
+## Etude de l'existant
+
+Avant de développer MiniMed, plusieurs solutions existantes ont été comparées :
+
+| Application | Points forts | Points faibles |
+|---|---|---|
+| **Medisafe / MyTherapy** | Gratuites, simples, rappels de prise efficaces | Conçues pour un seul utilisateur (son propre traitement), pas de gestion multi-patients |
+| **CareConnect Nurse (Corilus) / Inficyc** | Complètes, intégrées à la facturation INAMI, pensées pour les professionnels | Complexes, coûteuses, nécessitent une formation, hors de portée pour un usage familial |
+| **Carnet papier / messagerie familiale** | Gratuit, aucune barrière à l'entrée | Aucune structuration, aucune synchronisation entre aidants, risque élevé d'oubli |
+
+MiniMed se positionne entre ces deux extrêmes : une gestion multi-patients comme les logiciels professionnels, mais avec la simplicité et la gratuité des applications grand public.
+## Public Cible
+
+MiniMed s'adresse avant tout aux **aidants familiaux** : les proches qui assurent le suivi quotidien d'un patient, souvent âgé ou dépendant, et qui ont besoin d'une solution simple pour gérer les informations médicales et les traitements.
+
+L'application reste néanmoins pertinente pour :
+* les infirmiers indépendants qui suivent plusieurs patients dans leur tournée quotidienne,
+* les petites structures de soins (maison de repos, cabinet) qui recherchent un outil léger, sans la complexité d'un logiciel de gestion complet.
 
 
 ## Parcours utilisateur

@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 class MainBackground extends StatelessWidget {
   final Widget child;
+  final Widget? bottomNavigationBar;
 
   const MainBackground({
     super.key,
     required this.child,
+    this.bottomNavigationBar,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: bottomNavigationBar,
       body: Stack(
         children: [
           Container(
@@ -26,7 +29,6 @@ class MainBackground extends StatelessWidget {
               ),
             ),
           ),
-
 
           Positioned(
             top: 0,
@@ -52,7 +54,6 @@ class MainBackground extends StatelessWidget {
 class WavePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-
     final lightPaint = Paint()
       ..color = const Color(0xFF7772CD)
       ..style = PaintingStyle.fill;

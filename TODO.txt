@@ -1,7 +1,3 @@
-faire un bouton logout jsp où
-
-faire un truc navigation en bas de page mais jsp quoi mettre dedans honnetement donc jsp
-
-faire le readme et onboarding
-
-enlever les magic numbers
+--> implémenter le logout
+--> compléter le readme et onboarding
+--> enlever les magic numbers
