@@ -9,6 +9,7 @@ import 'package:minimed/constants/colors.dart';
 import 'package:minimed/constants/fonts.dart';
 import 'package:minimed/constants/sizes.dart';
 import 'package:minimed/constants/style.dart';
+import 'package:minimed/services/notifications_service.dart';
 import 'package:minimed/widget/action_button.dart';
 import 'package:minimed/widget/main_background.dart';
 import 'package:minimed/widget/my_form_field.dart';
@@ -30,6 +31,7 @@ class _AddNewMedicationState extends State<AddNewMedication> {
   String dosageUnit = '';
   int timesPerDay = 1;
   String instructions = '';
+  TimeOfDay? reminderTime;
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +130,31 @@ class _AddNewMedicationState extends State<AddNewMedication> {
               ],
             ),
 
+            GestureDetector(
+              onTap: () async {
+                final pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: const TimeOfDay(hour: 8, minute: 0),
+                );
+
+                if (pickedTime != null && mounted) {
+                  setState(() {
+                    reminderTime = pickedTime;
+                  });
+                }
+              },
+              child: AbsorbPointer(
+                child: MyFormField(
+                  label: reminderTime == null
+                      ? 'Heure de rappel (optionnel)'
+                      : 'Rappel à ${reminderTime!.hour.toString().padLeft(2, '0')}:${reminderTime!.minute.toString().padLeft(2, '0')}',
+                  icon: Icons.notifications_active_outlined,
+                  isToHide: false,
+                  onChanged: (_) {},
+                ),
+              ),
+            ),
+
             MyFormField(
               label: 'Instructions (optionnel)',
               icon: Icons.notes_outlined,
@@ -182,6 +209,17 @@ class _AddNewMedicationState extends State<AddNewMedication> {
                         createdAt: DateTime.now(),
                       ),
                     );
+
+                if (reminderTime != null) {
+                  final notificationId = DateTime.now().millisecondsSinceEpoch
+                      .remainder(100000);
+                  await NotificationsService.scheduleReminder(
+                    id: notificationId,
+                    medicationName: name.trim(),
+                    hour: reminderTime!.hour,
+                    minute: reminderTime!.minute,
+                  );
+                }
 
                 if (!context.mounted) return;
 

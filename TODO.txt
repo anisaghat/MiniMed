@@ -1,3 +1,1 @@
---> implémenter le logout
---> compléter le readme et onboarding
 --> enlever les magic numbers

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:minimed/firebase_options.dart';
 import 'package:minimed/screens/welcome_screen/welcome_screen.dart';
 import 'package:minimed/router/router.dart';
+import 'package:minimed/services/notifications_service.dart';
 
 
 Future<void> main() async{
@@ -10,6 +11,7 @@ Future<void> main() async{
   await Firebase.initializeApp(
     options : DefaultFirebaseOptions.currentPlatform,
   );
+  await NotificationsService.init();
   runApp(const MyApp());
 }
 
