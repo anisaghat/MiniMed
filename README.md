@@ -8,7 +8,7 @@ L’application permet notamment de consulter les médicaments prescrits, leur p
 
 MiniMed vise ainsi à simplifier le suivi quotidien des patients en regroupant toutes les informations importantes concernant leurs traitements dans une seule application claire, pratique et accessible.
 
-## Fonctionnalités principale
+## Fonctionnalités principales
 
 L'application permet de
 
@@ -19,9 +19,9 @@ L'application permet de
 * ajouter des médicaments à un patient
 * indiquer la posologie et le nombre de prises par jour
 * préciser les moments de prise d'un médicament si nécessaire
-* modifier ou supprimer les informations enreigstrées
+* modifier ou supprimer les informations enregistrées
 
-## Etude de l'existant
+## Étude de l'existant
 
 Avant de développer MiniMed, plusieurs solutions existantes ont été comparées :
 
@@ -32,7 +32,7 @@ Avant de développer MiniMed, plusieurs solutions existantes ont été comparée
 | **Carnet papier / messagerie familiale** | Gratuit, aucune barrière à l'entrée | Aucune structuration, aucune synchronisation entre aidants, risque élevé d'oubli |
 
 MiniMed se positionne entre ces deux extrêmes : une gestion multi-patients comme les logiciels professionnels, mais avec la simplicité et la gratuité des applications grand public.
-## Public Cible
+## Public cible
 
 MiniMed s'adresse avant tout aux **aidants familiaux** : les proches qui assurent le suivi quotidien d'un patient, souvent âgé ou dépendant, et qui ont besoin d'une solution simple pour gérer les informations médicales et les traitements.
 
@@ -74,29 +74,83 @@ On retrouvera ici :
 * Freezed
 * JSON Serializable
 
-Les odnnées sont manipulées à l'aide de DTO typées afin d'éviter les accès directs à des données non typées.
+Les données sont manipulées à l'aide de DTO typées afin d'éviter les accès directs à des données non typées.
+
 
 ## Structure générale
 
-///// à faire après lorsque le projet sera terminé, veiller à bien répartir les fichierds!!!!
+### Racine du projet
+
+À la racine du dépôt, on retrouve :
+
+- `/lib` : cœur de l'application Flutter (l'app `minimed`)
+- `/dto` : package séparé contenant les modèles de données (DTO) partagés, générés via Freezed et firestore_odm
+- `/android`, `/ios` : configurations spécifiques aux plateformes
+- `pubspec.yaml` : dépendances et configuration Flutter
+
+### Organisation du dossier `lib`
+
+Le dossier lib est organisé de la manière suivante :
+
+```
+lib/
+│── constants/         → tailles, polices, couleurs, styles
+│── router/             → configuration des routes de l'application
+│── screens/            → écrans de l'application
+│   ├── auth_screen/
+│   ├── login/
+│   ├── registration/
+│   ├── welcome_screen/
+│   ├── main_screen/    → écran principal, profil, paramètres
+│   ├── patients/         → liste, détail, création de patient
+│   ├── medication/       → ajout de médicament
+│── widget/               → composants UI réutilisables
+```
+
+### Organisation du package `dto`
+
+Le package dto contient les modèles de données partagés entre l'application et la base de données Firestore. Il est organisé comme suit :
+
+dto/lib/
+│── models/ → Patient, Medication, User (objets typés, générés via Freezed)
+│── schema.dart → déclaration du schéma Firestore (firestore_odm)
 
 
+Cette séparation entre `minimed` et `dto` permet de garder la logique de données indépendante de l'interface et de garantir un accès typé à Firestore plutot que des données brutes non structurées.
+
+## Fonctionnalités à venir
+
+- 🎮 **Dimension ludique** : badges ou indicateurs de suivi régulier pour encourager un usage sur la durée
+- 📡 **Gestion fine du mode hors-ligne** : messages dédiés en cas de perte de connexion (au-delà des états de chargement/erreur déjà gérés par les `StreamBuilder`)
+- ✏️ **Modification et suppression des médicaments** : actuellement, seuls l'ajout et la consultation sont disponibles pour les médicaments (le CRUD complet a été priorisé sur la ressource Patient)
+- 🌍 **Support multilingue complet** (FR/EN)
 
 
-## Lancer le projet
+## Documentation développeur
 
-Pour lancer le projet, il faudra veiller à installer toutes les dépendances nécessaires à l'aide de la commande : 
+### Installation
+
+1. Cloner ce dépôt
+2. Installer les dépendances dans le dossier `minimed` :
 
 `flutter pub get`
 
-à lancer dans le terminal du projet.
+3. Configurer Firebase :
+    - Créer un projet sur la [console Firebase](https://console.firebase.google.com/)
+    - Activer **Authentication** → méthode **E-mail / Mot de passe**
+    - Activer **Firestore Database** (mode production)
+    - Exécuter `flutterfire configure` à la racine du projet pour générer `lib/firebase_options.dart`
+4. Générer les DTO / fichiers ODM (dans le dossier `dto`) :
 
-Puis lancer l'application : 
+```
+cd dto
+dart run build_runner build --delete-conflicting-outputs
+```
+5. Lancer l'application :
+ `flutter run`
 
-`flutter run` 
+## Problèmes connus
 
-Pour régénrer les DTO / fichiers ODM : 
-
-`cd dto dart
-run build_runner build --delete-conflicting-outputs`
+- La gestion du mode hors-ligne se limite pour l'instant aux états de chargement/erreur natifs des `StreamBuilder` ; aucun message dédié n'est encore affiché en cas de perte de connexion internet.
+- Les médicaments ne peuvent pas encore être modifiés ou supprimés après ajout (seuls la création et la consultation sont disponibles).
 
